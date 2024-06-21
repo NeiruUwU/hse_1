@@ -27,7 +27,7 @@ async def game_start_cb(callback_query: CallbackQuery, callback_data: dict | Gam
         if old_question:
             old_answer_status = await service.answer_question(question=old_question, answer=old_answer)
     # Текст для победителя
-    winner_text = "Вы ответили верно и получили +5 баллов!" if old_answer_status else "Вы ответили не правильно\!"
+    winner_text = "Вы ответили верно и получили +5 баллов!" if old_answer_status else "Вы ответили не правильно!"
     
     # Получаем следующий шаг викторины
     step = await service.get_step(max_options=4)
