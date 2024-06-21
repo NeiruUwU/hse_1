@@ -1,5 +1,5 @@
 # hse_1
-pip install .
+pip install -r requirements.txt
 
 create .env
 
