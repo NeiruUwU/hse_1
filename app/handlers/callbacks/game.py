@@ -53,6 +53,7 @@ async def game_start_cb(callback_query: CallbackQuery, callback_data: dict | Gam
                 pass
 
         await callback_query.message.answer("Вы прошли Викторину\!", reply_markup=markup)
+        return
     
     # Формируем кнопки для вариантов ответа
     for option in step.options:
