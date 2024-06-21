@@ -1,5 +1,6 @@
 from tortoise import fields
 from tortoise.models import Model
+from enum import Enum
 
 class User(Model):
     id = fields.IntField(pk=True)
@@ -8,7 +9,7 @@ class User(Model):
     rating = fields.ReverseRelation['Rating']
 
 
-class Game(Model):
+class Game(Model):    
     id = fields.IntField(pk=True)
     name = fields.CharField(max_length=50)
     code = fields.CharField(max_length=50, unique=True)
@@ -16,6 +17,9 @@ class Game(Model):
     options = fields.ReverseRelation['Answer']
     rating = fields.ReverseRelation['Rating']
 
+    class Type(Enum):
+        FONT  = "game_font"
+        COLOR = "game_color"
 
 class Rating(Model):
     game = fields.ForeignKeyField('models.Game', related_name='rating')
@@ -30,12 +34,19 @@ class Question(Model):
     game = fields.ForeignKeyField('models.Game', related_name='questons')
     answer = fields.ForeignKeyField('models.Answer', related_name='questons')
     users = fields.ManyToManyRelation['User']
+    options = fields.ReverseRelation['OptionPivot']
+    
+    
+class OptionPivot(Model):
+    question = fields.ForeignKeyField('models.Question', related_name='options')
+    answer = fields.ForeignKeyField('models.Answer', related_name='options')
 
 
 class Answer(Model):
     id = fields.IntField(pk=True)
     name = fields.CharField(max_length=50)
     game = fields.ForeignKeyField('models.Game', related_name='options')
+    options = fields.ReverseRelation['OptionPivot']
     
 
     

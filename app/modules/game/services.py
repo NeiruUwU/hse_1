@@ -13,11 +13,11 @@ class GameService():
         self.game = game
         self.player = player
     
-    async def get_step(self) -> GameStep|None:
+    async def get_step(self, max_options: int = 4) -> GameStep|None:
         question = await self.rand_question()
         if question is None:
             return None
-        options = await self.rand_options()
+        options = await self.rand_options(question=question, limit=max_options)
         options.append(question.answer)
         random.shuffle(options)
         return GameStep(
@@ -37,10 +37,15 @@ class GameService():
         await rating.save()
         return status
     
-    async def rand_options(self, limit: int = 4) -> list[Answer]:
-        query = Answer.filter(game_id=self.game.id)
-        query = query.annotate(order=Random()).order_by('order')
-        random_options = await query.limit(limit-1).all()
+    async def rand_options(self, question: Question = None, limit: int = 4) -> list[Answer]:
+        if question:
+            query = Answer.filter(options__question=question)
+            query = query.annotate(order=Random()).order_by('order')
+            random_options = await query.limit(limit-1).all()
+        else:
+            query = Answer.filter(game_id=self.game.id)
+            query = query.annotate(order=Random()).order_by('order')
+            random_options = await query.limit(limit-1).all()
         return random_options
         
     async def rand_question(self) -> Question|None:
