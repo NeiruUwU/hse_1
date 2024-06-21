@@ -27,7 +27,7 @@ async def game_start_cb(callback_query: CallbackQuery, callback_data: dict | Gam
         if old_question:
             old_answer_status = await service.answer_question(question=old_question, answer=old_answer)
     # Текст для победителя
-    winner_text = "Вы ответили верно и получили +5 баллов\!" if old_answer_status else "Вы ответили не правильно\!"
+    winner_text = "Вы ответили верно и получили +5 баллов!" if old_answer_status else "Вы ответили не правильно\!"
     
     # Получаем следующий шаг викторины
     step = await service.get_step(max_options=4)
@@ -91,7 +91,7 @@ async def game_start_cb(callback_query: CallbackQuery, callback_data: dict | Gam
         # Отправляем сообщение с изображением и клавиатурой вариантов ответа
         await callback_query.message.answer_photo(
             BufferedInputFile(file.read(), filename=step.question.img_path),
-            caption="Отлично! Внимательно прочитайте вопрос на картинке и выберите один из вариантов снизу",
+            caption="Отлично! Посмотрите на картинку и выберите один из вариантов снизу",
             reply_markup=markup
         )
     await callback_query.answer()  # Отвечаем на коллбэк, чтобы Telegram не показывал ошибку ожидания ответа

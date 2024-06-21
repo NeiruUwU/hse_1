@@ -20,9 +20,9 @@ async def get_user_from_username(
         from_user = event.message.from_user
 
     if from_user:
-        # Ищем пользователя в базе данных
-        user = await User.get_or_create(username=from_user.username)
-        data['user'] = user[0]
-    
-    # сохраняем его в состояние
+        # Ищем пользователя в базе данных по username
+        user, created = await User.get_or_create(username=from_user.username)
+        data['user'] = user
+        
+    # Сохраняем пользователя в состояние и передаем управление обработчику
     return await handler(event, data)
