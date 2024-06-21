@@ -21,7 +21,7 @@ async def get_user_from_username(
 
     if from_user:
         # Ищем пользователя в базе данных по username
-        user, created = await User.get_or_create(username=from_user.username)
+        user, created = await User.get_or_create(username=from_user.username or from_user.full_name)
         data['user'] = user
         
     # Сохраняем пользователя в состояние и передаем управление обработчику
